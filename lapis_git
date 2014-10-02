@@ -1,6 +1,12 @@
 #!/bin/bash
+
+# We don't need to set up anything if we don't have the passphrase
+if [[ -z "$LAPIS_PASS" || (-n "$TRAVIS_SECURE_ENV_VARS" && "$TRAVIS_SECURE_ENV_VARS" = "false") ]]; then
+	echo "Passphrase is not available, unable to set up Git environment."
+	exit 1
+fi
+
 KEY_PATH=~/.ssh/lapis_git
-[ -z "$LAPIS_PASS" ] && LAPIS_PASS=" "
 
 # Ensure all commands below will be successful or fail if not
 set -e
