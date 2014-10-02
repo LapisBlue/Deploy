@@ -1,5 +1,2 @@
 * text=auto
-lapis_git text eol=lf
-javadocs text eol=lf
-repo text eol=lf
 *.sh text eol=lf
