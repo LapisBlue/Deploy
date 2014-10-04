@@ -63,6 +63,8 @@ git add -A
 	&& message="Update to $TRAVIS_REPO_SLUG@$TRAVIS_COMMIT (Build $TRAVIS_BUILD_NUMBER)" \
 	|| message="Update $(date -u +"%Y-%m-%dT%H:%M:%SZ")" # -> ugly date
 
+git commit -m $message
+
 # Push the changes to GitHub
 git push
 
