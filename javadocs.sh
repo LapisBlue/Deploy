@@ -31,8 +31,6 @@ set -e
 # Make sure we're running the right Travis JDK version
 [[ -z "$TRAVIS_JDK_VERSION" ||  "$TRAVIS_JDK_VERSION" = "$jdk" ]]
 
-echo "Initializing Git environment..."
-
 # Initialize the ssh-agent so we can use Git later for deploying
 eval $(ssh-agent)
 # Set up our Git environment

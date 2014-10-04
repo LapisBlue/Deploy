@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo && echo "Initializing Git environment..."
+
 # We don't need to set up anything if we don't have the passphrase
 [[ -z "$LAPIS_PASS" || ( -n "$TRAVIS_SECURE_ENV_VARS" && "$TRAVIS_SECURE_ENV_VARS" = "false" ) ]] && {
 	echo "Passphrase is not available, unable to set up Git environment."
@@ -66,4 +68,4 @@ echo "Setting up Git settings..."
 git config --global user.name "Lapislazuli"
 git config --global user.email "lapislazuli@lapis.blue"
 git config --global push.default simple
-echo "Done! Successfully set up Lapis Git environment. ;)"
+echo "Done! Successfully set up Lapis Git environment. ;)" && echo
