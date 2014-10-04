@@ -67,6 +67,6 @@ git add -A
 git push
 
 # Kill the ssh-agent because we're done with deploying
-ssh-agent -k
+eval $(ssh-agent -k)
 
 echo "Done! Successfully deployed Javadocs to GitHub! ;)"
