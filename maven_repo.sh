@@ -57,8 +57,8 @@ cd $GIT_DIR
 git add -A
 
 # Commit the changes with a more detailed commit message only for Travis.
-[[ "$TRAVIS" = "true" ]]
-	&& message="Update to $TRAVIS_REPO_SLUG@$TRAVIS_COMMIT (Build $TRAVIS_BUILD_NUMBER)"
+[[ "$TRAVIS" = "true" ]] \
+	&& message="Update to $TRAVIS_REPO_SLUG@$TRAVIS_COMMIT (Build $TRAVIS_BUILD_NUMBER)" \
 	|| message="Update $(date -u +"%Y-%m-%dT%H:%M:%SZ")" # -> ugly date
 
 # Push the changes to GitHub
