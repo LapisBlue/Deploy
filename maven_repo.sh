@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if enough arguments have been given to the script.
-[[ $# >= 1 ]] || {
+if [[ $# < 1 ]]; then
 	echo "Usage: $0 <command> [Travis-JDK]"
 	echo "This will run the command using these environment variables:"
 	echo "REPO_RELEASES, REPO_SNAPSHOTS, REPO_THIRDPARTY"
@@ -9,14 +9,14 @@
 	exit 1
 }
 
+GIT_REPO="git@github.com:LapisBlue/Repo.git"
+GIT_DIR=/tmp/lapis/repo
+
 # This is where I am.
 deploy_scripts=$(dirname $0)
 
 # The command to execute that will publish the artifacts.
 command=$1
-
-# Temporary Git repository
-git_dir=/tmp/lapis/repo
 
 # JDK to publish the artifacts with, Java 6 by default
 jdk=${2:-openjdk6}
@@ -30,19 +30,19 @@ set -e
 echo "Initializing Git environment..."
 
 # Initialize the ssh-agent so we can use Git later for deploying
-eval $(ssh_agent)
+eval $(ssh-agent)
 # Set up our Git environment
 $deploy_scripts/setup_git.sh
 
 # Clone our Maven repo repository
-git clone git@github.com:LapisBlue/Repo.git $git_dir
+git clone $GIT_REPO $GIT_DIR
 
 # Setup repo path environment variables
-export REPO_RELEASES="$git_dir/releases"
+export REPO_RELEASES="$GIT_DIR/releases"
 echo "Publishing releases to: $REPO_RELEASES"
-export REPO_SNAPSHOTS="$git_dir/snapshots"
+export REPO_SNAPSHOTS="$GIT_DIR/snapshots"
 echo "Publishing snapshots to: $REPO_SNAPSHOTS"
-export REPO_THIRDPARTY="$git_dir/thirdparty"
+export REPO_THIRDPARTY="$GIT_DIR/thirdparty"
 echo "Publishing third party artifacts to: $REPO_THIRDPARTY"
 
 echo "Publishing artifacts..."
@@ -51,6 +51,7 @@ echo "Publishing artifacts..."
 $command
 
 echo "Successfully published artifacts, deploying to GitHub..."
+cd $GIT_DIR
 
 # Stage all changed and removed files for commit
 git add -A

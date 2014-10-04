@@ -1,11 +1,14 @@
 #!/bin/bash
 
 # Check if enough arguments have been given to the script.
-[[ $# >= 3 ]] || {
+if [[ $# < 3 ]]; then
 	echo "Usage: $0 <name> <command> <dir> [Travis-JDK]"
 	echo "e.g.: $0 project \"./gradlew javadoc\" build/docs/javadoc"
 	exit 1
-}
+fi
+
+GIT_REPO="git@github.com:LapisBlue/Javadocs.git"
+GIT_DIR=/tmp/lapis/javadocs
 
 # This is where I am.
 deploy_scripts=$(dirname $0)
@@ -18,7 +21,6 @@ command=$2
 # Folders
 root_dir=$(pwd)
 dir=$3
-git_dir=/tmp/lapis/javadocs
 
 # JDK to create the Javadocs with, Java 8 by default
 jdk=${4:-oraclejdk8}
@@ -32,7 +34,7 @@ set -e
 echo "Initializing Git environment..."
 
 # Initialize the ssh-agent so we can use Git later for deploying
-eval $(ssh_agent)
+eval $(ssh-agent)
 # Set up our Git environment
 $deploy_scripts/setup_git.sh
 
@@ -44,10 +46,10 @@ $command
 echo "Completed Javadoc generation, deploying to GitHub..."
 
 # Clone our Javadocs repository
-git clone git@github.com:LapisBlue/Javadocs.git $git_dir
-cd $git_dir
+git clone $GIT_REPO $GIT_DIR
+cd $GIT_DIR
 
-echo "Javadocs location for this project: $git_dir/$name"
+echo "Javadoc location for this project: $GIT_DIR/$name"
 
 # Delete the old Javadocs so we have them completely clean again
 git rm -r $name
