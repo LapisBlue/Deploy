@@ -7,7 +7,7 @@ if [[ $# < 1 ]]; then
 	echo "REPO_RELEASES, REPO_SNAPSHOTS, REPO_THIRDPARTY"
 	echo "The build should automatically publish it in Maven repository format to the correct folder."
 	exit 1
-}
+fi
 
 GIT_REPO="git@github.com:LapisBlue/Repo.git"
 GIT_DIR=/tmp/lapis/repo
