@@ -9,7 +9,7 @@ if [[ $# < 1 ]]; then
 	exit 1
 fi
 
-GIT_REPO="git@github.com:LapisBlue/Repo.git"
+GIT_REPO=${GIT_REPO:-"git@github.com:LapisBlue/Repo.git"}
 GIT_DIR=/tmp/lapis/repo
 
 # This is where I am.
