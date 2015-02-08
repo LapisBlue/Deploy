@@ -30,7 +30,7 @@ set -e
 # Initialize the ssh-agent so we can use Git later for deploying
 eval $(ssh-agent)
 # Set up our Git environment
-$deploy_scripts/setup_git.sh
+$deploy_scripts/setup_git
 
 # Clone our Maven repo repository
 git clone $GIT_REPO $GIT_DIR
