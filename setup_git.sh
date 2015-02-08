@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Ensure all commands below will be successful or fail if not
+set -e
+
+# Enter password if called by ssh-add
+[ -n "$SSH_ASKPASS" ] && [ -n "$DISPLAY" ] && {
+	[ ! -f ".ssh-add" ]
+	touch .ssh-add
+	echo "$LAPIS_PASS"
+	exit 0
+}
+
 echo && echo "Initializing Git environment..."
 
 # We don't need to set up anything if we don't have the passphrase
@@ -8,17 +19,11 @@ echo && echo "Initializing Git environment..."
 	exit 1
 }
 
-# Ensure all commands below will be successful or fail if not
-set -e
-
 KEY_NAME=lapislazuli.pem
 KEY_PATH=~/.ssh/$KEY_NAME
 
 # This is where I am.
 deploy_scripts=$(dirname $0)
-
-# We will need Expect to pass the passphrase to ssh-add
-sudo apt-get install expect -qq
 
 mkdir -pv $(dirname $KEY_PATH)
 cp -v "$deploy_scripts/$KEY_NAME" $KEY_PATH
@@ -26,27 +31,22 @@ cp -v "$deploy_scripts/$KEY_NAME" $KEY_PATH
 # Change the permissions so it is accepted as SSH key
 chmod -v 600 $KEY_PATH
 
-# Add the ssh key to the SSH agent
-expect 2> /dev/null << EOF
-	# Start the process
-	spawn ssh-add $KEY_PATH
-	# If an error occurs we should already stop here
-	expect {
-		eof { exit 1 }
-		"Enter passphrase"
-	}
+# Setup detached ASKPASS for ssh
+export SSH_ASKPASS=$0
+export DISPLAY=dummydisplay:0
 
-	# Enter the passphrase into the prompt
-	send "$LAPIS_PASS\r"
+cleanup() {
+	unset SSH_ASKPASS DISPLAY LAPIS_PASS
+	rm .ssh-add
+}
 
-	expect {
-		eof { exit 1 }
-		"try again" { exit 1 }
-		"Identity added"
-	}
+true | setsid ssh-add "$KEY_PATH" || {
+	cleanup
+	echo "Failed to add private Git key. Maybe the passphrase is wrong?"
+	exit 1
+}
 
-	expect eof
-EOF
+cleanup
 
 echo "Successfully installed Lapis Git SSH key!"
 echo "Adding GitHub host keys..."
@@ -69,3 +69,4 @@ git config --global user.name "Lapislazuli"
 git config --global user.email "lapislazuli@lapis.blue"
 git config --global push.default simple
 echo "Done! Successfully set up Lapis Git environment. ;)" && echo
+
