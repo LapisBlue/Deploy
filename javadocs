@@ -8,7 +8,7 @@ if [[ $# < 3 ]]; then
 fi
 
 GIT_REPO="git@github.com:LapisBlue/Javadocs.git"
-GIT_DIR=/tmp/lapis/javadocs
+GIT_DIR=/tmp/deploy/javadocs
 
 # This is where I am.
 deploy_scripts=$(dirname $0)
@@ -69,4 +69,5 @@ git push
 # Kill the ssh-agent because we're done with deploying
 eval $(ssh-agent -k)
 
-echo "Done! Successfully deployed Javadocs to GitHub! ;)"
+echo "Done! Successfully deployed Javadocs to GitHub! :)"
+

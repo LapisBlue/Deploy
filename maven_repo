@@ -10,7 +10,7 @@ if [[ $# < 1 ]]; then
 fi
 
 GIT_REPO=${GIT_REPO:-"git@github.com:LapisBlue/Repo.git"}
-GIT_DIR=/tmp/lapis/repo
+GIT_DIR=/tmp/deploy/repo
 
 # This is where I am.
 deploy_scripts=$(dirname $0)
@@ -67,4 +67,5 @@ git push
 # Kill the ssh-agent because we're done with deploying
 eval $(ssh-agent -k)
 
-echo "Done! Successfully published artifacts to the GitHub Maven repository! ;)"
+echo "Done! Successfully published artifacts to the GitHub Maven repository! :)"
+
