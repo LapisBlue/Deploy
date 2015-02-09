@@ -4,7 +4,7 @@
 if [[ $# < 1 ]]; then
 	echo "Usage: $0 <command> [Travis-JDK]"
 	echo "This will run the command using these environment variables:"
-	echo "REPO_RELEASES, REPO_SNAPSHOTS, REPO_THIRDPARTY"
+	echo "REPO_GLOBAL, REPO_RELEASES, REPO_SNAPSHOTS, REPO_THIRDPARTY"
 	echo "The build should automatically publish it in Maven repository format to the correct folder."
 	exit 1
 fi
@@ -36,6 +36,8 @@ $deploy_scripts/setup_git
 git clone $GIT_REPO $GIT_DIR
 
 # Setup repo path environment variables
+export REPO_GLOBAL="$GIT_DIR"
+echo "Publishing to: $REPO_GLOBAL"
 export REPO_RELEASES="$GIT_DIR/releases"
 echo "Publishing releases to: $REPO_RELEASES"
 export REPO_SNAPSHOTS="$GIT_DIR/snapshots"
