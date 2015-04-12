@@ -7,8 +7,8 @@ if [[ $# < 3 ]]; then
 	exit 1
 fi
 
-GIT_REPO=${GIT_REPO:-"git@github.com:${GITHUB_REPO:-"LapisBlue/Javadocs"}.git"}
-GIT_DIR=$DEPLOY_ROOT/javadocs
+GIT_REPO="git@github.com:LapisBlue/Javadocs.git"
+GIT_DIR=/tmp/deploy/javadocs
 
 # This is where I am.
 deploy_scripts=$(dirname $0)
