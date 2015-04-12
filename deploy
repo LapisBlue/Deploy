@@ -1,0 +1,10 @@
+#!/bin/bash
+export DEPLOY_REPO=LapisBlue/Deploy
+BRANCH=master
+export DEPLOY_ROOT=/tmp/lapis/deploy
+
+# Ensure all commands below will be successful or fail if not
+set -e
+
+mkdir -pv $DEPLOY_ROOT
+wget https://github.com/$DEPLOY_REPO/archive/$BRANCH.tar.gz -O - | tar -xzv -C $DEPLOY_ROOT --strip-components 1
