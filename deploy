@@ -8,3 +8,4 @@ set -e
 
 mkdir -pv $DEPLOY_DIR
 wget https://github.com/$DEPLOY_REPO/archive/$BRANCH.tar.gz -O - | tar -xzv -C $DEPLOY_DIR --strip-components 1
+ls -R $DEPLOY_DIR
