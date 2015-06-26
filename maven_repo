@@ -2,7 +2,7 @@
 
 # Check if enough arguments have been given to the script.
 if [[ $# < 1 ]]; then
-	echo "Usage: $0 <command> [Travis-JDK]"
+	echo "Usage: $0 <command> [Travis-JDK] [branch]"
 	echo "This will run the command using these environment variables:"
 	echo "REPO_GLOBAL, REPO_RELEASES, REPO_SNAPSHOTS, REPO_THIRDPARTY"
 	echo "The build should automatically publish it in Maven repository format to the correct folder."
@@ -20,12 +20,15 @@ command=$1
 
 # JDK to publish the artifacts with, Java 6 by default
 jdk=${2:-openjdk6}
+branch=${3:-master}
 
 # Ensure all commands complete successfully
 set -e
 
 # Make sure we're running the right Travis JDK version
 [[ -z "$TRAVIS_JDK_VERSION" ||  "$TRAVIS_JDK_VERSION" = "$jdk" ]]
+# Make sure we're on the right branch
+[[ -z "$TRAVIS_BRANCH" ||  "$TRAVIS_BRANCH" = "$branch" ]]
 
 # Initialize the ssh-agent so we can use Git later for deploying
 eval $(ssh-agent)
